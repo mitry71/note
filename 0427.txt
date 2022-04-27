@@ -1,0 +1,293 @@
+0427 상속
+
+package javaClass;
+//체크 카드 클래스
+public class CheckingAccount extends Account {
+	//필드
+	String cardNo;  //체크카드 번호
+	
+	//생성자
+	public CheckingAccount(String accountNo, String ownerName, int balance, String cardNo) {
+		this.accountNo=accountNo;
+		this.ownerName=ownerName;
+		this.balance=balance;
+		this.cardNo=cardNo;
+	}
+	
+}
+
+이렇게 할 수도 있지만
+
+
+package javaClass;
+//체크 카드 클래스
+public class CheckingAccount extends Account {
+	//필드
+	String cardNo;  //체크카드 번호
+	
+	//생성자
+	public CheckingAccount(String accountNo, String ownerName, int balance, String cardNo) {
+		super(accountNo, ownerName, balance);  //부모 생성자 호출
+		this.cardNo=cardNo;
+	}
+	
+}
+
+부모 생성자를 호출해서 할 수도 있음
+
+
+package javaClass;
+//체크 카드 클래스
+public class CheckingAccount extends Account {
+	//필드
+	String cardNo;  //체크카드 번호
+	
+	//생성자
+	public CheckingAccount(String accountNo, String ownerName, int balance, String cardNo) {
+		super(accountNo, ownerName, balance);  //부모 생성자 호출
+		this.cardNo=cardNo;
+	}
+	
+	//메소드(카드로 지불한다)
+	int pay(String cardNo, int amount) {
+		if(!this.cardNo.equals(cardNo) || balance < amount) {  //생성하면서 부여받은 카드번호와 매개변수 카드번호가 같지 않을 때
+			return 0;
+		}else {
+		return amount;
+	}
+	
+}
+
+해도 되지만 인위적 exception 만들어서 할 수도 있음
+
+package javaClass;
+//체크 카드 클래스
+public class CheckingAccount extends Account {
+	//필드
+	String cardNo;  //체크카드 번호
+	
+	//생성자
+	public CheckingAccount(String accountNo, String ownerName, int balance, String cardNo) {
+		super(accountNo, ownerName, balance);  //부모 생성자 호출
+		this.cardNo=cardNo;
+	}
+	
+	//메소드(카드로 지불한다)
+	int pay(String cardNo, int amount) throws Exception {
+		if(!this.cardNo.equals(cardNo) || balance < amount) {  //생성하면서 부여받은 카드번호와 매개변수 카드번호가 같지 않을 때 or 잔액이 인출하려는 금액보다 작을 때 예외처리
+			throw new Exception("지불이 불가능합니다.");
+		}else {
+			return withdraw(amount);
+		}
+	}
+	
+}
+
+인출 메소드에 balance가 amount보다 작은 경우 예외처리돼 있으므로 아래처럼 해도 됨.
+
+
+package javaClass;
+//체크 카드 클래스
+public class CheckingAccount extends Account {
+	//필드
+	String cardNo;  //체크카드 번호
+	
+	//생성자
+	public CheckingAccount(String accountNo, String ownerName, int balance, String cardNo) {
+		super(accountNo, ownerName, balance);  //부모 생성자 호출
+		this.cardNo=cardNo;
+	}
+	
+	//메소드(카드로 지불한다)
+	int pay(String cardNo, int amount) throws Exception {
+		if(!this.cardNo.equals(cardNo)) {  //생성하면서 부여받은 카드번호와 매개변수 카드번호가 같지 않을 때
+			throw new Exception("카드번호가 일치하지 않습니다.");
+		}else {
+			return withdraw(amount);
+		}
+	}
+	
+}
+
+package javaClass;
+
+public class CheckingAccountEx1 {
+
+	public static void main(String[] args) {
+		CheckingAccount chulsu=new CheckingAccount("222-55-12345", "김철수", 10000, "1111-2222-3333-4444");
+		chulsu.deposit(50000);
+		int paidAmount=chulsu.pay("1111-2222-3333-4444", 25000);
+		
+	}
+
+}
+
+error나는 이유 - 예외처리해놨기 때문
+클래스에서 throw Exception했으면 객체 활용시 try-catch로 예외 받아야 한다
+
+
+package javaClass;
+
+public class CheckingAccountEx1 {
+
+	public static void main(String[] args) {
+		CheckingAccount chulsu=new CheckingAccount("222-55-12345", "김철수", 10000, "1111-2222-3333-4444");
+		chulsu.deposit(50000);
+		try {
+			int paidAmount=chulsu.pay("1111-2222-3333-4444", 25000);
+			System.out.println("지불액 : " + paidAmount);
+			System.out.println("잔액 : " + chulsu.balance);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+				
+	}
+
+}
+
+자바는 다중 상속을 허용하지 않음
+
+메소드 재정의(오버라이드)
+
+package javaClass;
+//마이너스 통장
+public class CreditLineAccount extends Account {
+	//필드
+	int creditLine;  //마이너스 한도
+	
+	//생성자
+	public CreditLineAccount(String accountNo, String ownerName, int balance, int creditLine) {
+		super(accountNo, ownerName, balance);
+		this.creditLine=creditLine;
+	}
+	
+	//메소드 오버라이드
+	int withdraw(int amount) throws Exception {
+		if((balance+creditLine) < amount) {  //잔액과 대출한도의 합이 인출하려는 금액보다 작은 경우
+			throw new Exception("인출이 불가능합니다.");
+		}
+		balance-=amount;  //위 경우가 아닐 때
+		return amount;
+	}
+}
+
+package javaClass;
+
+public class CreditLineAccountEx1 {
+
+	public static void main(String[] args) {
+		CreditLineAccount sundal=new CreditLineAccount("111-55-784541", "김선달", 10, 1000000);
+		sundal.deposit(500);
+		try {
+			int amount=sundal.withdraw(300000);
+			System.out.println("찾은 금액 : " + amount);
+			System.out.println("잔액 : " + sundal.balance);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+찾은 금액 : 300000
+잔액 : -299490
+
+
+
+package javaClass;
+
+public class CreditLineAccountEx1 {
+
+	public static void main(String[] args) {
+		CreditLineAccount sundal=new CreditLineAccount("111-55-784541", "김선달", 10, 1000000);
+		sundal.deposit(500);
+		try {
+			int amount=sundal.withdraw(30000000);
+			System.out.println("찾은 금액 : " + amount);
+			System.out.println("잔액 : " + sundal.balance);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+인출이 불가능합니다.
+
+
+어노테이션
+
+package javaClass;
+//마이너스 통장
+public class CreditLineAccount extends Account {
+	//필드
+	int creditLine;  //마이너스 한도
+	
+	//생성자
+	public CreditLineAccount(String accountNo, String ownerName, int balance, int creditLine) {
+		super(accountNo, ownerName, balance);
+		this.creditLine=creditLine;
+	}
+	
+	//메소드 오버라이드
+	int wihtdraw(int amount) throws Exception {  //ht
+		if((balance+creditLine) < amount) {  //잔액과 대출한도의 합이 인출하려는 금액보다 작은 경우
+			throw new Exception("인출이 불가능합니다.");
+		}
+		balance-=amount;  //위 경우가 아닐 때
+		return amount;
+	}
+}
+
+package javaClass;
+
+public class CreditLineAccountEx1 {
+
+	public static void main(String[] args) {
+		CreditLineAccount sundal=new CreditLineAccount("111-55-784541", "김선달", 10, 1000000);
+		sundal.deposit(500);
+		try {
+			int amount=sundal.withdraw(300000);
+			System.out.println("찾은 금액 : " + amount);
+			System.out.println("잔액 : " + sundal.balance);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+잔액이 부족합니다.
+한도 안인데 ??
+
+
+package javaClass;
+//마이너스 통장
+public class CreditLineAccount extends Account {
+	//필드
+	int creditLine;  //마이너스 한도
+	
+	//생성자
+	public CreditLineAccount(String accountNo, String ownerName, int balance, int creditLine) {
+		super(accountNo, ownerName, balance);
+		this.creditLine=creditLine;
+	}
+	
+	//메소드 오버라이드
+	@Override //오타나면 에러로 알려줌
+	int wihtdraw(int amount) throws Exception {  //에러! - Account 클래스 메소드와 이름 동일해야 하는데!
+		if((balance+creditLine) < amount) {  //잔액과 대출한도의 합이 인출하려는 금액보다 작은 경우
+			throw new Exception("인출이 불가능합니다.");
+		}
+		balance-=amount;  //위 경우가 아닐 때
+		return amount;
+	}
+}
+
+@Override 에러방지
+
+
+
+
+
+
