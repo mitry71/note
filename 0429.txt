@@ -1,0 +1,439 @@
+package javaClass;
+
+public class PolymorphismEx1 {
+
+	public static void main(String[] args) {
+		/*Account chulsu=new Account();
+		CheckingAccount gildong=new CheckingAccount();
+		CreditLineAccount chanho=new CreditLineAccount();*/
+		Account chulsu=new CheckingAccount();
+		Account chanho=new CreditLineAccount();
+		Account gildong=new DokdoAccount();
+		/*chulsu.pay x
+		chanho.withdraw o		 
+		gildong.deposit
+		*/
+	}
+
+}
+
+
+
+
+package javaClass;
+
+public class PolymorphismEx1 {
+
+	public static void main(String[] args) {
+		Account chulsu=new Account();
+		CheckingAccount gildong=new CheckingAccount();
+		Account sundal=gildong; //자동 타입 변환
+		CheckingAccount younghee=(CheckingAccount)chulsu; //부모 객체를 자식 타입으로 자동 타입 변환할 수 없다; 강제 타입 변환
+	}
+
+}
+
+
+
+package javaClass;
+
+public class Tire {
+	//필드 
+	public int maxRotation;  //최대 회전수(타이어수명)
+	public int accumulatedRotation;  //누적 회전수
+	public String location;  //타이어의 위치
+	
+	//생성자
+	public Tire(String location, int maxRotation) {
+		this.location=location;
+		this.maxRotation=maxRotation;
+		this.accumulatedRotation=0;
+	}
+	
+	//메소드
+	public boolean roll() {
+		accumulatedRotation++;  //누적 회전수 증가
+		if(accumulatedRotation < maxRotation) {
+			System.out.println(location + " Tire 수명: " + (maxRotation-accumulatedRotation) + "회");
+			return true;
+		}else {
+			System.out.println("*** " + location + " Tire 펑크 ***");
+			return false;
+		}
+	}
+}
+
+
+
+package javaClass;
+
+public class Car {
+	//필드
+	Tire frontLeftTire=new Tire("앞왼쪽", 6);
+	Tire frontRightTire=new Tire("앞오른쪽", 4);
+	Tire backLeftTire=new Tire("뒷왼쪽", 3);
+	Tire backRightTire=new Tire("뒷오른쪽", 5);
+	
+	//생성자
+	//메소드
+	int run() {
+		System.out.println("자동차가 달립니다.");
+		if(frontLeftTire.roll() == false) {
+			stop();
+			return 1;
+		}
+		if(frontRightTire.roll() == false) {
+			stop();
+			return 2;
+		}
+		if(backLeftTire.roll() == false) {
+			stop();
+			return 3;
+		}
+		if(backRightTire.roll() == false) {
+			stop();
+			return 4;
+		}
+		return 0;
+	}
+	
+	void stop() {
+		System.out.println("자동차가 멈춥니다.");
+	}
+
+}
+
+
+package javaClass;
+
+public class HankookTire extends Tire { //부모 클래스에 디폴트 생성자가 없으므로 에러 발생
+	//필드
+	//생성자
+	public HankookTire(String lacation, int maxRotation) {
+		super(lacation, maxRotation);
+	}
+	
+	//메소드
+	@Override  //재정의
+	public boolean roll() {
+		accumulatedRotation++;  //누적 회전수 증가
+		if(accumulatedRotation < maxRotation) {
+			System.out.println(location + " HankookTire 수명: " + (maxRotation-accumulatedRotation) + "회");
+			return true;
+		}else {
+			System.out.println("*** " + location + " HankookTire 펑크 ***");
+			return false;
+		}
+	}
+}
+
+
+package javaClass;
+
+public class KumhoTire extends Tire {
+	//필드
+	//생성자
+	public KumhoTire(String lacation, int maxRotation) {
+		super(lacation, maxRotation);
+	}
+	
+	//메소드
+	@Override  //재정의
+	public boolean roll() {
+		accumulatedRotation++;  //누적 회전수 증가
+		if(accumulatedRotation < maxRotation) {
+			System.out.println(location + " KumhoTire 수명: " + (maxRotation-accumulatedRotation) + "회");
+			return true;
+		}else {
+			System.out.println("*** " + location + " KumhoTire 펑크 ***");
+			return false;
+		}
+	}
+}
+
+
+
+package javaClass;
+
+public class CarEx1 {
+
+	public static void main(String[] args) {
+		Car chulsuCar=new Car();
+		
+		for(int i=1; i<=5; i++) {
+			int problemLocation = chulsuCar.run();
+			switch(problemLocation) {
+				case 1:
+					System.out.println("앞왼쪽 KumhoTire로 교체");
+					chulsuCar.frontLeftTire=new KumhoTire("앞왼쪽", 15);
+					break;
+				case 2:
+					System.out.println("앞오른쪽 KumhoTire로 교체");
+					chulsuCar.frontRightTire=new KumhoTire("앞오른쪽", 12);
+					break;
+				case 3:
+					System.out.println("뒷왼쪽 HankookTire로 교체");
+					chulsuCar.backLeftTire=new HankookTire("뒷왼쪽", 10);
+					break;
+				case 4:
+					System.out.println("뒷오른쪽 HankookTire로 교체");
+					chulsuCar.backRightTire=new HankookTire("뒷오른쪽", 13);
+					break;
+			}
+			System.out.println("--------------------------------");
+		}
+		
+	}
+
+}
+
+
+package javaClass;
+
+public class CarEx1 {
+
+	public static void main(String[] args) {
+		Car chulsuCar=new Car();
+		
+		for(int i=1; i<=5; i++) {
+			int problemLocation = chulsuCar.run();
+			switch(problemLocation) {
+				case 1:
+					System.out.println("앞왼쪽 KumhoTire로 교체");
+					chulsuCar.tires[problemLocation-1]=new KumhoTire("앞왼쪽", 15);
+					break;
+				case 2:
+					System.out.println("앞오른쪽 KumhoTire로 교체");
+					chulsuCar.frontRightTire=new KumhoTire("앞오른쪽", 12);
+					break;
+				case 3:
+					System.out.println("뒷왼쪽 HankookTire로 교체");
+					chulsuCar.backLeftTire=new HankookTire("뒷왼쪽", 10);
+					break;
+				case 4:
+					System.out.println("뒷오른쪽 HankookTire로 교체");
+					chulsuCar.backRightTire=new HankookTire("뒷오른쪽", 13);
+					break;
+			}
+			System.out.println("--------------------------------");
+		}
+		
+	}
+
+}
+
+
+package javaClass;
+
+public class CarEx1 {
+
+	public static void main(String[] args) {
+		Car chulsuCar=new Car();
+		
+		for(int i=1; i<=5; i++) {
+			int problemLocation = chulsuCar.run();
+			/*switch(problemLocation) {
+				case 1:
+					System.out.println("앞왼쪽 KumhoTire로 교체");
+					chulsuCar.frontLeftTire=new KumhoTire("앞왼쪽", 15);
+					break;
+				case 2:
+					System.out.println("앞오른쪽 KumhoTire로 교체");
+					chulsuCar.frontRightTire=new KumhoTire("앞오른쪽", 12);
+					break;
+				case 3:
+					System.out.println("뒷왼쪽 HankookTire로 교체");
+					chulsuCar.backLeftTire=new HankookTire("뒷왼쪽", 10);
+					break;
+				case 4:
+					System.out.println("뒷오른쪽 HankookTire로 교체");
+					chulsuCar.backRightTire=new HankookTire("뒷오른쪽", 13);
+					break;
+			}*/
+			if(problemLocation != 0) {
+				System.out.println(chulsuCar.tires[problemLocation-1].location + " HankookTire로 교체");
+				chulsuCar.tires[problemLocation-1] =new HankookTire(chulsuCar.tires[problemLocation-1].location, 15);
+			}
+			System.out.println("--------------------------------");
+		}
+		
+	}
+
+}
+
+
+
+package javaClass;
+
+public class Vehicle {
+	//메소드
+	public void run() {
+		System.out.println("차량이 달립니다.");
+	}
+}
+
+
+
+package javaClass;
+
+public class Driver {
+	//메소드
+	public void drive(Vehicle vehicle) {
+		vehicle.run();
+	}
+}
+
+
+
+package javaClass;
+
+public class Bus extends Vehicle {
+	
+	//메소드
+	@Override
+	public void run() {
+		System.out.println("버스가 달립니다.");
+	}
+}
+
+
+
+package javaClass;
+
+public class Taxi extends Vehicle {
+	@Override
+	public void run() {
+		System.out.println("택시가 달립니다.");
+	}
+}
+
+
+package javaClass;
+
+public class DriverEx1 {
+
+	public static void main(String[] args) {
+		Driver chulsu=new Driver();
+		Bus bus=new Bus();
+		Taxi taxi=new Taxi();
+		chulsu.drive(bus);
+		chulsu.drive(taxi);
+
+	}
+
+}
+
+
+
+abstract 추상클래스 만들 때 체크!
+추상클래스는 반드시 추상메소드 있어야 한다
+추상메소드는 본체가 없다
+추상클래스를 상속받으면 추상메소드를 반드시 오버라이드해야 한다
+
+
+package javaClass;
+
+public abstract class Animall {
+	//필드
+	String name;
+	//추상메소드
+	abstract void move();  //추상메소드는 본체가 없다
+}
+
+
+package javaClass;
+
+public class Tiger extends Animall {
+	//필드
+	int age;
+	
+	//메소드
+	@Override
+	void move() {
+		System.out.println("네발로 이동합니다.");
+	}
+	
+}
+
+
+package javaClass;
+
+public class Eagle extends Animall {
+	//필드
+	String home;
+	
+	//메소드
+	@Override
+	void move() {
+		System.out.println("날개로 이동합니다.");
+	}
+	
+}
+
+
+package javaClass;
+
+public class AnimallEx1 {
+
+	public static void main(String[] args) {
+		Tiger tiger1=new Tiger();
+		Eagle eagle1=new Eagle();
+		tiger1.name="호돌이";
+		tiger1.age=2;
+		eagle1.name="위니";
+		eagle1.home="소나무둥지";
+		System.out.println(tiger1.name + "는 " + tiger1.age + "살 입니다.");
+		tiger1.move();
+		System.out.println(eagle1.name + "는 " + eagle1.home + "에 삽니다.");
+		eagle1.move();
+	}
+
+}
+
+
+확인문제
+1214
+
+5.부모 생성자가 기본 생성자가 아니므로 자식 생성자에서 부모 생성자를 호출해야 한다.
+super(name);
+
+6.
+this() 생성자에서 생성자를 호출
+
+package ClassConfirmEx;
+
+public class Parent {
+	public String nation;
+	
+	public Parent() {
+		this("대한민국");
+		System.out.println("Parent() call");
+	}
+	
+	public Parent(String nation) {
+		this.nation=nation;
+		System.out.println("Parent(String nation) call");
+	}
+}
+
+package ClassConfirmEx;
+
+public class Child extends Parent {
+	private String name;
+	
+	public Child() { //디폴트 생성자 - 부모 디폴트 생성자 호출
+		this("홍길동");
+		System.out.println("Child() call");
+	}
+	
+	public Child(String name) {
+		this.name=name;
+		System.out.println("Child(String name) call");
+	}
+}
+
+
+"Parent(String nation) call"
+"Parent() call"
+"Child(String name) call"
+"Child() call"
