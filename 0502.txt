@@ -1,0 +1,513 @@
+package javaClass;
+
+public interface iAnimal {
+	//추상메소드
+	abstract void eat();
+}
+
+package javaClass;
+
+public class iCat implements iAnimal {
+
+	@Override
+	public void eat() {
+		System.out.println("생선을 좋아합니다.");
+		
+	}  //부모 인터페이스를 자식이 구현하는 것 implements; 인터페이스는 역할에 대한 정의를 내리고 자식 클래스에서 구현한다; 통일, 다형성 목적
+	
+}
+
+
+package javaClass;
+
+public class iTiger extends Animal implements iAnimal {
+
+	@Override
+	public void eat() {
+		System.out.println("멧돼지를 잡아먹습니다.");
+		
+	}
+
+	@Override
+	void move() {
+		System.out.println("네발로 이동합니다.");
+		
+	}  //iTiger는 Animal 클래스를 상속받고 iAnimall 인터페이스를 구현하겠다
+	
+}
+
+package javaClass;
+
+public class InterfaceEx1 {
+
+	public static void main(String[] args) {
+		iCat cat1=new iCat();  //iCat 인스턴스 객체 생성
+		cat1.eat();
+		iTiger tiger1=new iTiger();
+		tiger1.move();
+		tiger1.eat();
+	}
+
+}
+
+
+
+
+
+package javaClass;
+//리모콘 인터페이스
+public interface RemoteControl {
+	//상수; 인터페이스는 일반적인 필드는 가질 수 없다
+	int MAX_VOLUME=10;  //public static final 생략 가능
+	int MIN_VOLUME=0;
+	
+	//추상메소드
+	void turnOn();  //abstract 생략 가능; 인터페이스는 일반메소드(실체 존재)를 가질 수 없기 때문에
+	void turnOff();
+	void setVolume(int volume);
+	
+	//디폴트메소드
+	default void setMute(boolean mute) {
+		if(mute) {
+			System.out.println("무음 처리합니다.");
+		}else {
+			System.out.println("무음 해제합니다.");
+		}
+	}
+	
+	//정적메소드: 인스턴스 객체를 생성하지 않고 사용하는 메소드
+	static void changeBattery() {
+		System.out.println("건전지를 교환합니다.");	
+	}
+}
+
+package javaClass;
+
+public class Television implements RemoteControl {
+	//필드
+	private int volume;
+	
+	@Override
+	public void turnOn() {
+		System.out.println("TV를 켭니다.");		
+	}
+
+	@Override
+	public void turnOff() {
+		System.out.println("TV를 끕니다.");
+	}
+
+	@Override
+	public void setVolume(int volume) {		
+		if(volume > RemoteControl.MAX_VOLUME) {
+			this.volume = RemoteControl.MAX_VOLUME;
+		}else if(volume < RemoteControl.MIN_VOLUME) {
+			this.volume = RemoteControl.MIN_VOLUME;
+		}else {
+			this.volume = volume;
+		}
+		System.out.println("현재 TV 볼륨 : " + this.volume);
+	}
+}
+
+package javaClass;
+
+public class Audio implements RemoteControl {
+	//필드
+	private int volume;
+	
+	@Override
+	public void turnOn() {
+		System.out.println("Audio를 켭니다.");
+	}
+
+	@Override
+	public void turnOff() {
+		System.out.println("Audio를 끕니다.");
+	}
+
+	@Override
+	public void setVolume(int volume) {
+		if(volume > RemoteControl.MAX_VOLUME) {
+			this.volume = MAX_VOLUME;
+		}else if(volume < RemoteControl.MIN_VOLUME) {
+			this.volume = MIN_VOLUME;
+		}else {
+			this.volume = volume;
+		}
+		System.out.println("현재 Audio 볼륨 : " + this.volume);
+	}
+}
+
+
+package javaClass;
+
+public class TelevisionEx1 {
+
+	public static void main(String[] args) {
+		RemoteControl rc;  //변수 선언
+		rc=new Television();  //리모콘으로 텔레비전을 조절한다
+		rc.turnOn();
+		rc.setVolume(3);
+		rc.setMute(true);
+		rc.setMute(false);
+		rc.turnOff();
+		rc=new Audio();  //리모콘을 오디오에 이용한다
+		rc.turnOn();
+		RemoteControl.changeBattery();  //정적메소드 사용
+	}
+
+}
+
+
+package javaClass;
+
+public class Audio implements RemoteControl {
+	//필드
+	private int volume;
+	private boolean mute;
+	
+	@Override
+	public void turnOn() {
+		System.out.println("Audio를 켭니다.");
+	}
+
+	@Override
+	public void turnOff() {
+		System.out.println("Audio를 끕니다.");
+	}
+
+	@Override
+	public void setVolume(int volume) {
+		if(volume > RemoteControl.MAX_VOLUME) {
+			this.volume = MAX_VOLUME;
+		}else if(volume < RemoteControl.MIN_VOLUME) {
+			this.volume = MIN_VOLUME;
+		}else {
+			this.volume = volume;
+		}
+		System.out.println("현재 Audio 볼륨 : " + this.volume);
+	}
+	
+	@Override
+	public void setMute(boolean mute) {
+		this.mute=mute;
+		if(mute) {
+			System.out.println("Audio를 무음 처리합니다.");
+		}else {
+			System.out.println("Audio를 무음 해제합니다.");
+		}
+	}
+}  //디폴트메소드를 오버라이드할 수 있다
+
+
+package javaClass;
+
+public class TelevisionEx1 {
+
+	public static void main(String[] args) {
+		RemoteControl rc;  //변수 선언
+		rc=new Television();  //리모콘으로 텔레비전을 조절한다
+		rc.turnOn();
+		rc.setVolume(3);
+		rc.setMute(true);
+		rc.setMute(false);
+		rc.turnOff();
+		rc=new Audio();  //리모콘을 오디오에 이용한다
+		rc.turnOn();
+		rc.setVolume(3);
+		rc.setMute(true);
+		rc.setMute(false);
+		rc.turnOff();
+		RemoteControl.changeBattery();  //정적메소드 사용
+	}
+
+}
+
+
+
+package javaClass;
+
+public interface Vehicle {
+	//메소드
+	public void run();
+}
+
+package javaClass;
+
+public class Bus implements Vehicle {
+	
+	//메소드
+	@Override
+	public void run() {
+		System.out.println("버스가 달립니다.");
+	}
+}
+
+package javaClass;
+
+public class Taxi implements Vehicle {
+
+	@Override
+	public void run() {
+		System.out.println("택시가 달립니다.");
+	}
+	
+}
+
+
+
+
+
+package javaClass;
+
+public class Bus implements Vehicle {
+	
+	//메소드
+	@Override
+	public void run() {
+		System.out.println("버스가 달립니다.");
+	}
+	
+	public void checkFare() {
+		System.out.println("승차요금을 체크합니다.");
+	}
+}
+
+
+package javaClass;
+
+public class VehicleEx1 {
+
+	public static void main(String[] args) {
+		Vehicle vehicle;  //탈것 선언
+		vehicle=new Bus();
+		vehicle.run();
+		//vehicle.checkFare(); 에러!
+		Bus bus=(Bus)vehicle;  //강제 타입 변환
+		bus.run();
+		bus.checkFare();
+	}
+
+}
+
+
+
+package javaClass;
+
+public class Driver {
+	//메소드
+	public void drive(Vehicle vehicle) {
+		if(vehicle instanceof Bus) {  //객체 타입 확인
+			Bus bus=(Bus)vehicle;
+			bus.checkFare();
+		}
+		vehicle.run();
+	}
+}
+
+package javaClass;
+
+public class DriverEx1 {
+
+	public static void main(String[] args) {
+		Driver chulsu=new Driver();
+		Bus bus=new Bus();
+		Taxi taxi=new Taxi();
+		chulsu.drive(bus);
+		chulsu.drive(taxi);
+
+	}
+
+}
+
+승차요금을 체크합니다.
+버스가 달립니다.
+택시가 달립니다.
+
+
+
+package javaClass;
+
+public interface Vehicle extends iAnimal, RemoteControl {  //인터페이스는 다중상속 가능
+	//메소드
+	public void run();
+}
+
+
+확인문제
+2. 4-자동 타입 변환
+
+4.
+package javaClass;
+
+public interface DataAccessObject {	
+	void select();	
+	void insert();
+	void update();
+	void delete();
+}
+
+package javaClass;
+
+public class OracleDao implements DataAccessObject {
+
+	@Override
+	public void select() {
+		System.out.println("Oracle DB에서 검색");
+	}
+
+	@Override
+	public void insert() {
+		System.out.println("Oracle DB에 삽입");
+	}
+
+	@Override
+	public void update() {
+		System.out.println("Oracle DB를 수정");
+	}
+
+	@Override
+	public void delete() {
+		System.out.println("Oracle DB에서 삭제");
+	}
+
+}
+
+package javaClass;
+
+public class MySqlDao implements DataAccessObject {
+
+	@Override
+	public void select() {
+		System.out.println("MySql DB에서 검색");
+	}
+
+	@Override
+	public void insert() {
+		System.out.println("MySql DB에 삽입");
+	}
+
+	@Override
+	public void update() {
+		System.out.println("MySql DB를 수정");
+	}
+
+	@Override
+	public void delete() {
+		System.out.println("MySql DB에서 삭제");
+	}
+
+}
+
+package javaClass;
+
+public class DaoEx {
+
+	public static void main(String[] args) {
+		dbwork(new OracleDao());
+		dbwork(new MySqlDao());
+	}
+	
+	public static void dbwork(DataAccessObject dao) {
+		dao.select();
+		dao.insert();
+		dao.update();
+		dao.delete();
+	}
+
+}
+
+
+
+5.
+package javaClass;
+
+public interface Action {
+	void work();
+}
+
+구현하는 클래스 없이
+
+package javaClass;
+
+public class ActionEx {
+
+	public static void main(String[] args) {
+		Action action=new Action() {  //익명으로 구현하는 클래스를 new로 생성
+			
+			@Override
+			public void work() {
+				System.out.println("복사를 합니다.");
+			}
+		};
+		action.work();
+	}
+
+}
+
+
+
+package javaClass;
+
+public class AClass {
+	
+	class BClass {
+		//필드
+		int bField;
+		//생성자
+		public BClass() {
+			
+		}
+		//메소드
+		void bMethod() {
+			
+		}
+	}
+	
+	static class CClass {
+		int cField;
+		static int cField2; //정적 클래스 내에서 필드 가능
+		//생성자
+		public CClass() {
+		
+		}
+		//메소드
+		void cMethod() {
+			
+		}
+		static void cMethod2() {
+			
+		}
+	}
+}
+
+
+package javaClass;
+
+public class AClassEx {
+
+	public static void main(String[] args) {
+		AClass aa=new AClass(); //인스턴스 객체 생성
+		AClass.BClass bb=aa.new BClass(); //AClass 내부에 있는 BClass 객체 생성
+		bb.bField=10;
+		bb.bMethod();
+	}
+
+}
+
+package javaClass;
+
+public class AClassEx2 {
+
+	public static void main(String[] args) {
+		AClass.CClass cc=new AClass.CClass();
+		cc.cField=50;
+		cc.cMethod();
+	}
+
+}
+
+
+내부 클래스를 사용하려면 외부 클래스의 인스턴스 객체를 먼저 생성하여 사용해야 한다.
+정적 내부 클래스를 사용하려면 외부 클래스 객체를 생성할 필요가 없고 외부 클래스를 통해 생성하면 된다.
