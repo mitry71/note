@@ -1,0 +1,891 @@
+package javaClass;
+//바깥 클래스
+public class AClass {
+	//필드
+	int aField;
+	//생성자
+	public AClass() {
+		System.out.println("AClass가 생성됨");
+	}
+	
+	//내부에 있는 인스턴스 멤버 클래스
+	class BClass {
+		//필드
+		int bField;
+		//static int bField2;  정적 필드(X)
+		//생성자
+		public BClass() {
+			System.out.println("BClass가 생성됨");
+		}
+		//메소드
+		void bMethod() {
+			
+		}
+		//static void bMethod2() {}  정적 메소드(X)
+	}
+	
+	//정적 멤버 클래스
+	static class CClass {
+		int cField;
+		static int cField2; //정적 클래스 내에서 정적 필드 가능
+		//생성자
+		public CClass() {
+			System.out.println("CClass가 생성됨");
+		}
+		//메소드
+		void cMethod() {
+			
+		}
+		//정적메소드
+		static void cMethod2() {
+			
+		}
+	}
+	
+	//바깥 클래스 메소드
+	void aMethod() {
+		//로컬 클래스
+		class DClass {
+			//필드
+			int dField;
+			//static int dField2;  정적 필드(X)
+			//생성자
+			public DClass() {
+				System.out.println("DClass가 생성됨");
+			}
+			//메소드
+			void dMethod() {
+				
+			}
+			//static void dMethod2() {}  정적 메소드(X)
+		}
+	}//aMethod()
+}
+
+
+
+package javaClass;
+
+public class AClassEx {
+
+	public static void main(String[] args) {
+		AClass aa=new AClass(); //인스턴스 객체 생성
+		AClass.BClass bb=aa.new BClass(); //AClass 내부에 있는 BClass 객체 생성
+		bb.bField=10;
+		bb.bMethod();
+		aa.aMethod();
+	}
+
+}
+
+
+
+package javaClass;
+
+public class AClassEx2 {
+
+	public static void main(String[] args) {
+		AClass.CClass cc=new AClass.CClass();  //내부 정적 클래스 객체 생성
+		cc.cField=50;
+		cc.cMethod();
+	}
+
+}
+
+
+
+*중첩 인터페이스*
+
+package javaClass;
+//바깥 클래스
+public class NClass {
+	//내부 인터페이스
+	interface inter {
+		//추상메소드
+		void iMethod();
+	}
+}
+
+
+package javaClass;
+//바깥 클래스
+public class Button {
+	//인터페이스 타입 필드
+	OnClickListener listener;
+	
+	void setOnClickListener(OnClickListener listener) {
+		this.listener=listener;
+	}
+	
+	void touch() {
+		listener.onClick();
+	}
+	
+	//인터페이스
+	interface OnClickListener {
+		//추상메소드
+		void onClick();
+	}
+}
+
+package javaClass;
+//구현 클래스
+public class CallListener implements Button.OnClickListener {
+
+	@Override
+	public void onClick() {
+		System.out.println("전화를 겁니다.");
+	}
+
+}
+
+package javaClass;
+
+public class MessageListener implements Button.OnClickListener {
+
+	@Override
+	public void onClick() {
+		System.out.println("메시지를 보냅니다.");
+	}
+
+}
+
+package javaClass;
+
+public class ButtonEx {
+
+	public static void main(String[] args) {
+		Button button=new Button();
+		button.setOnClickListener(new CallListener());
+		button.touch();
+		button.setOnClickListener(new MessageListener());
+		button.touch();
+	}
+
+}
+
+
+
+
+package javaClass;
+
+public class Person {
+	//메소드
+	void wake() {
+		System.out.println("7시에 일어납니다.");
+	}
+}
+
+
+package javaClass;
+
+public class Anonymous {
+	//필드
+	Person field=new Person() {  //초기값 대입
+		void work() {
+			System.out.println("출근합니다.");
+		}
+		@Override
+		void wake() {
+			System.out.println("6시에 일어납니다.");
+			work();
+		}
+	};
+	
+	//메소드
+	void method1() {
+		//로컬 변수
+		Person mField=new Person() {  //초기값 대입
+			void walk() {
+				System.out.println("산책합니다.");
+			}
+			@Override
+			void wake() {
+				System.out.println("7시에 일어납니다.");
+				walk();
+			}
+		};
+		mField.wake();  //메소드 안에서 로컬 변수 사용
+	}
+}
+
+
+package javaClass;
+
+public class AnonymousEx {
+
+	public static void main(String[] args) {
+		Anonymous anony=new Anonymous();  //인스턴스 객체 생성
+		anony.field.wake();  //필드 field 객체 내 메소드 호출
+		anony.method1();
+		anony.method2(new Person() {
+			void study() {
+				System.out.println("공부합니다.");
+			}
+			@Override
+			void wake() {
+				System.out.println("8시에 일어납니다.");
+				study();
+			}
+		});
+	}
+
+}
+
+
+
+*확인문제*
+1. 4 (중첩 클래스의 접근제한)
+2. 3
+3. 3
+4. 
+package ClassConfirmEx;
+
+public class Car {
+	class Tire {}
+	static class Engine {}
+}
+
+
+package ClassConfirmEx;
+
+public class NestedClassEx {
+
+	public static void main(String[] args) {
+		Car myCar=new Car();
+		Car.Tire tire=myCar.new Tire();
+		Car.Engine engine=new Car.Engine();
+	}
+
+}
+
+
+5.
+package ClassConfirmEx;
+
+public interface Vehicle {
+	public void run();
+}
+
+package ClassConfirmEx;
+
+public class Anonymous {
+	Vehicle field=new Vehicle() {
+		
+		@Override
+		public void run() {
+			System.out.println("자전거가 달립니다.");
+		}
+	};
+	
+	void method1() {
+		Vehicle localVar=new Vehicle() {
+			
+			@Override
+			public void run() {
+				System.out.println("승용차가 달립니다.");
+			}
+		};		
+		localVar.run();
+	}
+	
+	void method2(Vehicle v) {
+		v.run();
+	}
+}
+
+
+package ClassConfirmEx;
+
+public class AnonymousEx {
+
+	public static void main(String[] args) {
+		Anonymous anony=new Anonymous();
+		anony.field.run();
+		anony.method1();
+		anony.method2(new Vehicle() {
+			
+			@Override
+			public void run() {
+				System.out.println("트럭이 달립니다.");
+			}
+		});
+	}
+
+}
+
+
+6.
+package ClassConfirmEx;
+
+public class Catting {
+	void startChat(String chatId) {
+		String nickName=null;
+		nickName=chatId;
+		Chat chat=new Chat() {
+			@Override
+			public void start() {
+				while(true) {
+					String inputData="안녕하세요";
+					String message="[" + nickName + "]" + inputData;
+					sendMessage(message);
+				}
+			}
+		};
+		chat.start();
+	}
+	
+	class Chat {
+		void start() {
+			
+		}
+		void sendMessage(String message) {
+			
+		}
+	}
+}
+
+
+package ClassConfirmEx;
+
+public class Catting {
+	void startChat(String chatId) {
+		String nickName=chatId;  //final or effectively final이어야 함
+		Chat chat=new Chat() {
+			@Override
+			public void start() {
+				while(true) {
+					String inputData="안녕하세요";
+					String message="[" + nickName + "]" + inputData;
+					sendMessage(message);
+				}
+			}
+		};
+		chat.start();
+	}
+	
+	class Chat {
+		void start() {
+			
+		}
+		void sendMessage(String message) {
+			
+		}
+	}
+}
+
+
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		int num1=10;
+		int num2=0;
+		int result=num1/num2;
+		System.out.println("계산결과 : " + result);
+	}
+
+}
+
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at JavaException.ExceptionEx1.main(ExceptionEx1.java:8)
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		int num1=10;
+		int num2=2;
+		String str=null;
+		int result=num1/num2;
+		System.out.println("계산결과 : " + result);
+		System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+		
+	}
+
+}
+
+계산결과 : 5
+Exception in thread "main" java.lang.NullPointerException
+	at JavaException.ExceptionEx1.main(ExceptionEx1.java:11)
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		int num1=10;
+		int num2=2;
+		String str="안녕하세요";
+		int[] nums= {10,20,30};
+		int result=num1/num2;
+		System.out.println("계산결과 : " + result);
+		System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+		System.out.println(nums[3]);
+	}
+
+}
+
+계산결과 : 5
+안녕하세요
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+	at JavaException.ExceptionEx1.main(ExceptionEx1.java:13)
+
+인덱스 범위 벗어남
+
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		int num1=10;
+		int num2=2;
+		String str="안녕하세요";
+		int[] nums= {10,20,30};
+		int result=num1/num2;
+		String data1="200";
+		String data2="300";
+		System.out.println("계산결과 : " + result);
+		System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+		System.out.println(nums[2]);
+		System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+	}
+
+}
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		int num1=10;
+		int num2=2;
+		String str="안녕하세요";
+		int[] nums= {10,20,30};
+		int result=num1/num2;
+		String data1="200";
+		String data2="a300";
+		System.out.println("계산결과 : " + result);
+		System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+		System.out.println(nums[2]);
+		System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+	}
+
+}
+
+계산결과 : 5
+안녕하세요
+30
+Exception in thread "main" java.lang.NumberFormatException: For input string: "a300"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.base/java.lang.Integer.parseInt(Integer.java:652)
+	at java.base/java.lang.Integer.parseInt(Integer.java:770)
+	at JavaException.ExceptionEx1.main(ExceptionEx1.java:16)
+
+
+
+package javaClass;
+
+public class Driver {
+	//메소드
+	public void drive(Vehicle vehicle) {
+		//if(vehicle instanceof Bus) {  //객체 타입 확인
+			Bus bus=(Bus)vehicle;
+			bus.checkFare();
+		//}
+		vehicle.run();
+	}
+}
+
+
+package javaClass;
+
+public class DriverEx1 {
+
+	public static void main(String[] args) {
+		Driver chulsu=new Driver();
+		//Bus bus=new Bus();
+		Taxi taxi=new Taxi();
+		//chulsu.drive(bus);
+		chulsu.drive(taxi);
+
+	}
+
+}
+
+
+Exception in thread "main" java.lang.ClassCastException: class javaClass.Taxi cannot be cast to class javaClass.Bus (javaClass.Taxi and javaClass.Bus are in unnamed module of loader 'app')
+	at javaClass.Driver.drive(Driver.java:7)
+	at javaClass.DriverEx1.main(DriverEx1.java:10)
+
+
+예외 발생하면 그 라인 전까지만 실행, 이후는 실행 안함
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=0;
+			System.out.println(num1);
+			String str="안녕하세요";
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="a300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+}
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=0;
+			System.out.println(num1);
+			String str="안녕하세요";
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="a300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException e) {
+			System.out.println("0으로 나눌 수 없습니다.");
+		}
+	}
+
+}
+
+try 블럭은 정상적일 때 수행하는 블럭
+
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=2;
+			System.out.println(num1);
+			String str="안녕하세요";
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException e) {
+			System.out.println("0으로 나눌 수 없습니다.");
+		}finally {  //예외처리와 관계없이 무조건 실행
+			System.out.println("값을 다시 확인하고 실행하세요");
+		}
+	}
+
+}
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=2;
+			System.out.println(num1);
+			String str=null;
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException e) {
+			System.out.println("0으로 나눌 수 없습니다.");
+		}finally {  //예외처리와 관계없이 무조건 실행
+			System.out.println("값을 다시 확인하고 실행하세요");
+		}
+	}
+
+}
+
+
+10
+계산결과 : 5
+값을 다시 확인하고 실행하세요
+Exception in thread "main" java.lang.NullPointerException
+	at JavaException.ExceptionEx1.main(ExceptionEx1.java:16)
+
+
+이 에러는 그 에러가 아니다
+>다중catch
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=2;
+			System.out.println(num1);
+			String str=null;
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException e) {
+			System.out.println("0으로 나눌 수 없습니다.");
+		}catch(NullPointerException e) {
+			System.out.println("문자를 참조하고 있지 않습니다.");
+		}finally {  //예외처리와 관계없이 무조건 실행
+			System.out.println("값을 다시 확인하고 실행하세요");
+		}
+	}
+
+}
+
+10
+계산결과 : 5
+문자를 참조하고 있지 않습니다.
+값을 다시 확인하고 실행하세요
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=2;
+			System.out.println(num1);
+			String str=null;
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException e) {
+			System.out.println("0으로 나눌 수 없습니다.");
+		}catch(NullPointerException e) {
+			System.out.println("문자를 참조하고 있지 않습니다.");
+		}catch(Exception e) {  //모든 exception 마지막
+			System.out.println("개발자에게 문의하세요(010-1111-2222)-" + e.getMessage());
+		}finally {  //예외처리와 관계없이 무조건 실행
+			System.out.println("값을 다시 확인하고 실행하세요");
+		}
+	}
+
+}
+
+
+
+package JavaException;
+
+public class ExceptionEx1 {
+
+	public static void main(String[] args) {
+		try {
+			int num1=10;
+			int num2=2;
+			System.out.println(num1);
+			String str=null;
+			int[] nums= {10,20,30};
+			int result=num1/num2;
+			String data1="200";
+			String data2="300";
+			System.out.println("계산결과 : " + result);
+			System.out.println(str.toString());  //toString(): str 번지 찾아가서 String 형태의 데이터를 가져온다
+			System.out.println(nums[2]);
+			System.out.println(Integer.parseInt(data1)+Integer.parseInt(data2));
+		}catch(ArithmeticException | NumberFormatException e) {  //멀티 캐치문
+			System.out.println("0으로 나눌 수 없거나 숫자로 변환할 수 없습니다.");
+		}catch(NullPointerException e) {
+			System.out.println("문자를 참조하고 있지 않습니다.");
+		}catch(Exception e) {
+			System.out.println("개발자에게 문의하세요(010-1111-2222)-" + e.getMessage());
+		}finally {  //예외처리와 관계없이 무조건 실행
+			System.out.println("값을 다시 확인하고 실행하세요");
+		}
+	}
+
+}
+
+
+
+package javaClass;
+//사용자 정의 예외 클래스
+public class BalanceInsufficientEx extends Exception {  //모든 exception 정보를 가지고 있는 클래스를 상속받는다
+	public BalanceInsufficientEx() {
+		
+	}
+	public BalanceInsufficientEx(String message) {
+		super(message);
+	}
+}
+
+
+package javaClass;
+//은행 계좌 클래스
+public class Account {
+	//필드
+	static final String BANKNAME="신한은행";
+	String accountNo;  //계좌번호 필드
+	String ownerName;  //예금주 필드
+	int balance;  //잔액 필드
+	
+	//생성자
+	public Account(String accountNo, String ownerName, int balance) { //매개변수
+		this.accountNo=accountNo; //외부에서 받는 parameter변수와 내부에 있는 클래스 변수의 이름이 서로 같을 때, this. < 클래스로 인식
+		this.ownerName=ownerName;
+		this.balance=balance;
+	}
+	//디폴트 생성자; 매개변수 없는 생성자
+	public Account() {
+		
+	}
+	
+	//예금 메소드
+	void deposit(int amount) {
+		balance+=amount; //실행; balance=balance+amount;
+	}
+	//인출 메소드
+	int withdraw(int amount) throws BalanceInsufficientException {
+		if(balance < amount) {
+			throw new BalanceInsufficientException("잔액이 부족합니다.(" + (amount-balance) + "원 부족)");
+		}
+		balance-=amount;
+		return amount;
+	}
+		
+}
+
+
+package javaClass;
+
+public class AccountEx2 {
+
+	public static void main(String[] args) {
+		try {
+			Account gildong=new Account("111-777-66666", "홍길동", 10);
+			Account chanho=new Account("333-888-99999", "박찬호", 1000);
+			gildong.deposit(2000);
+			chanho.deposit(600);
+			gildong.withdraw(30000);
+			printAccount(gildong); //printAccount 메소드 호출
+			printAccount(chanho);  //Account 클래스 객체를 매개변수로 가져와야 함
+			printAccount(new Account("111-888-33333", "박지성", 5000000));
+		}catch (BalanceInsufficientException e) {
+			System.out.println(e.getMessage());			
+		}
+	}
+		
+		//통장 내역 출력 메서드
+		static void printAccount(Account obj) {
+			System.out.println("거래은행 : " + Account.BANKNAME);
+			System.out.println("계좌번호 : " + obj.accountNo);
+			System.out.println("예금주이름 : " + obj.ownerName);
+			System.out.println("잔액 : " + obj.balance);
+			System.out.println("============================");
+		}
+	
+}
+
+
+package javaClass;
+
+public class AccountEx1 {
+
+	public static void main(String[] args) {
+		int amount=0;
+		Account chulsu=new Account(); //철수의 계좌 생성
+		chulsu.accountNo="111-222-33333"; //철수의 계좌번호
+		chulsu.ownerName="김철수";
+		chulsu.balance=1500;
+		Account younghee=new Account();
+		younghee.accountNo="111-333-55555";
+		younghee.ownerName="이영희";
+		younghee.balance=0;
+		younghee.deposit(2000);
+		chulsu.deposit(300);
+		younghee.deposit(1000);
+		try {
+		amount = younghee.withdraw(15000);
+		System.out.println("찾은 금액 : " + amount);
+		}catch(BalanceInsufficientException e) {
+			System.out.println(e.getMessage());
+			System.out.println("잔액 : " + younghee.balance);
+		}
+		
+	}
+	
+}
+
+
+exception 사용자 정의한 클래스 생성
+
+
+*확인문제*
+1. 4
+2. 3
+3. rectangle class 참고 / 4 - 사용자 정의 예외
+4. 2 (선언부 throws / 예외 발생 시 throw)
+5. 3
+
+6.
+10
+숫자로 변환할 수 없음
+10
+인덱스를 초과했음
+10
+
+7. 
+super(message);
+
+super(message);
+
+throws NotExistIDException, WrongPasswordException
+
+throw new NotExistIDException("아이디가 존재하지 않습니다.");
+
+throw new WrongPasswordException("패스워드가 틀립니다.);
