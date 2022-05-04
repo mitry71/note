@@ -1,0 +1,506 @@
+package javaAPI;
+
+public class Key {
+	public int number;
+	
+	public Key(int number) {
+		this.number=number;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Key) {
+			Key compareKey=(Key) obj;
+			if(this.number == compareKey.number) {
+				return true;
+			}
+		}
+		return false;
+	}
+	@Override
+	public int hashCode() {
+		return number;
+	}
+}
+
+
+package javaAPI;
+
+import java.util.HashMap;
+
+public class KeyEx1 {
+
+	public static void main(String[] args) {
+		HashMap<Key, String> hashMap=new HashMap<Key, String>();
+		hashMap.put(new Key(90), "홍길동");
+		String value=hashMap.get(new Key(90));
+		System.out.println(value);
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx1 {
+
+	public static void main(String[] args) {
+		String str="내일부터 어린이날 휴무";
+		System.out.println(str);
+		char ch=str.charAt(7);
+		System.out.println(ch);
+	}
+
+}
+
+
+package javaAPI;
+
+import java.util.Scanner;
+
+public class StringEx1 {
+
+	public static void main(String[] args) {
+		/*String str="내일부터 어린이날 휴무";
+		System.out.println(str);
+		char ch=str.charAt(7);
+		System.out.println(ch);*/
+		Scanner sc=new Scanner(System.in);
+		System.out.print("주민등록번호입력>>");
+		String jumin=sc.next();
+		System.out.println(jumin);
+		char sex=jumin.charAt(7);
+		if(jumin.length()==14) {
+			if(sex=='1' || sex=='3') {
+				System.out.println("남성입니다.");
+			}else if(sex=='2' || sex=='4') {
+				System.out.println("여성입니다.");
+			}else {
+				System.out.println("주민번호 입력이 잘못되었습니다.");
+			}
+		}else {
+			System.out.println("주민번호 자리수가 틀립니다.");
+		}
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx2 {
+
+	public static void main(String[] args) {
+		String str="대한민국";
+		byte[] blen=str.getBytes();  //문자열 바이트로 인코딩
+		System.out.println(blen.length);
+		String str2="korea";
+		byte[] blen2=str2.getBytes();  //문자열 바이트로 인코딩
+		System.out.println(blen2.length);
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx3 {
+
+	public static void main(String[] args) {
+		//문자열 찾기
+		String str="내일부터 어린이날 휴무입니다.";
+		int index=str.indexOf("어린이");  //어른(-1), 어(5)
+		System.out.println(index);
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx3 {
+
+	public static void main(String[] args) {
+		//문자열 찾기
+		String str="내일부터 어린이날 휴무입니다.";
+		int index=str.indexOf("어린이");
+		System.out.println(index);
+		String subject="이것이 자바다";
+		int location=subject.indexOf("자바");
+		if(location != -1) {
+			System.out.println("자바와 관련된 책입니다.");
+		}else {
+			System.out.println("자바와 관련이 없는 책입니다.");
+		}
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx4 {
+
+	public static void main(String[] args) {
+		//문자열 대치(replace)
+		String str="자바는 객체지향언어이며 풍부한 API를 제공합니다.";
+		String newStr=str.replace("자바", "JAVA");  //새로운 문자열 생성, 스트링 버퍼
+		System.out.println(str);
+		System.out.println(newStr);
+		//문자열 잘라내기(substring)
+		String memo="computer";
+		System.out.println(memo.substring(3));
+		System.out.println(memo.substring(4, 6));
+		System.out.println(memo.substring(3, 6));
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx5 {
+
+	public static void main(String[] args) {
+		String ssn="921023-1369744";
+		System.out.println(ssn.substring(0, 7) + "*******");
+		String original="Java Programming";
+		String lower=original.toLowerCase();
+		String upper=original.toUpperCase();
+		System.out.println(lower);
+		System.out.println(upper);
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx6 {
+
+	public static void main(String[] args) {
+		String str="     안녕하세요     ";  //공백도 문자열
+		String newStr=str.trim();  //좌우 공백 제거
+		System.out.println(str);
+		System.out.println(newStr);
+		String str1=String.valueOf(50);
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx7 {
+
+	public static void main(String[] args) {
+		String text="홍길동, 김철수, 박찬호, 이영희, 박지성";
+		String[] names=text.split(",");  //"," : 구분자
+		for(String na:names) {  //배열에 특화된 향상된 for문 사용
+			System.out.println(na);
+		}
+		/*
+		for(int i=0; i<names.length; i++) {
+			System.out.println(names[i]);
+		*/
+	}
+
+}
+
+
+package javaAPI;
+
+import java.util.StringTokenizer;
+
+public class StringTokenizerEz {
+
+	public static void main(String[] args) {
+		String text="홍길동,김철수,박찬호,이영희,박지성";
+		StringTokenizer st=new StringTokenizer(text, ",");
+		/*int tokens=st.countTokens(); //구분한 문자열의 개수
+		for(int i=0; i<tokens; i++) {
+			String str=st.nextToken(); //nextToken() : 분리된 문자열을 하나씩 가져오는 메소드
+			System.out.println(str);
+		}*/
+		while(st.hasMoreTokens()) {  //st객체에 ,으로 분리한 토큰이 존재하냐 > 참이면 
+			String str=st.nextToken();  //st객체의 토큰을 꺼내와서 str에 저장하고
+			System.out.println(str);  //출력해라
+		}
+	}
+
+}
+
+package javaAPI;
+
+public class StringEx7 {
+
+	public static void main(String[] args) {
+		String text="홍길동, 김철수&박찬호, 이영희#박지성";
+		String[] names=text.split(",");  //"," : 구분자
+		for(String na:names) {  //배열에 특화된 향상된 for문 사용
+			System.out.println(na);
+		}
+		/*
+		for(int i=0; i<names.length; i++) {
+			System.out.println(names[i]);
+		*/
+	}
+
+}
+
+
+package javaAPI;
+
+public class StringEx7 {
+
+	public static void main(String[] args) {
+		String text="홍길동,김철수&박찬호,이영희#박지성";
+		String[] names=text.split(",|&|#");  //"," : 구분자  //비트연산자-논리연산자
+		for(String na:names) {  //배열에 특화된 향상된 for문 사용
+			System.out.println(na);
+		}
+		/*
+		for(int i=0; i<names.length; i++) {
+			System.out.println(names[i]);
+		*/
+	}
+
+}
+
+
+구분자 여러개면 String 클래스의 split 메소드 사용해야 함
+StringTokenizer 클래스는 구분자 한개만 사용 가능
+
+
+package javaAPI;
+
+public class StringBufferEx1 {
+
+	public static void main(String[] args) {
+		String str="korea";
+		str+="fighting";  //str=str+"fighting";
+		str+="corona";
+		System.out.println(str);
+	}
+
+}
+
+//성능저하
+
+
+package javaAPI;
+
+public class StringBufferEx1 {
+
+	public static void main(String[] args) {
+		/*String str="korea";
+		str+="fighting";  //str=str+"fighting";
+		str+="corona";
+		System.out.println(str);*/
+		
+		StringBuilder sb=new StringBuilder();
+		sb.append("korea");
+		sb.append("fighting");
+		sb.append("corona");
+		System.out.println(sb.toString());
+		sb.insert(5, "-");
+		System.out.println(sb.toString());
+		sb.insert(14, "==>");
+		System.out.println(sb.toString());
+		sb.setCharAt(5, ':');
+		System.out.println(sb.toString());
+		sb.replace(6, 14, "remember"); //6번 인덱스부터 14번 인덱스 전까지(13번까지)
+		System.out.println(sb.toString());
+		sb.delete(14, 23);
+		System.out.println(sb.toString());
+		String result=sb.toString();
+		System.out.println(result);
+	}
+
+}
+
+
+객체 복제
+-얕은 복사 : 일반 타입
+-깊은 복사 : 배열, 객체
+
+
+
+*얕은 복제*
+
+package javaAPI;
+
+public class Member implements Cloneable {
+	//필드
+	public String id;
+	public String name;
+	public String password;
+	public int age;
+	public boolean adult;
+	//생성자
+	public Member(String id, String name, String password, int age, boolean adult) {
+		this.id=id;
+		this.name=name;
+		this.password=password;
+		this.age=age;
+		this.adult=adult;
+	}
+	//메소드
+	public Member getMember() {
+		Member cloned=null;
+		try {
+			cloned=(Member) clone();  //복제한다는 메소드
+		}catch(CloneNotSupportedException e) {  //clone 메소드는 try-catch 필히 요구함
+			
+		}
+		return cloned;
+	}
+}
+
+
+package javaAPI;
+
+public class MemberEx1 {
+
+	public static void main(String[] args) {
+		//인스턴스 객체 생성
+		Member original=new Member("hong", "홍길동", "12345", 50, true);
+		Member cloned=original.getMember(); //original객체의 getMember()메소드로 복제한 객체가 cloned에 대입됨
+		cloned.password="77777";
+		System.out.println("원본객체 필드값 출력");
+		System.out.println(original.id);
+		System.out.println(original.name);
+		System.out.println(original.password);
+		System.out.println(original.age);
+		System.out.println(original.adult);
+		System.out.println("------------------------");
+		System.out.println("복제객체 필드값 출력");
+		System.out.println(cloned.id);
+		System.out.println(cloned.name);
+		System.out.println(cloned.password);
+		System.out.println(cloned.age);
+		System.out.println(cloned.adult);
+	}
+
+}
+
+
+
+
+
+package javaAPI;
+
+public class Member2 implements Cloneable {
+	//필드
+	public String name;
+	public int age;
+	public int[] scores;
+	public Car car;
+	//생성자
+	public Member2(String name, int age, int[] scores, Car car) {
+		this.name=name;
+		this.age=age;
+		this.scores=scores;
+		this.car=car;
+	}
+	//메소드
+	public Member2 getMember() {
+		Member2 cloned=null;
+		try {
+			cloned=(Member2) clone();
+		}catch(CloneNotSupportedException e) {
+			
+		}
+		return cloned;
+	}
+}
+
+
+package javaAPI;
+
+public class Member2Ex1 {
+
+	public static void main(String[] args) {
+		Member2 original=new Member2("홍길동", 50, new int[] {80,90,70}, new Car("소나타"));
+		Member2 cloned=original.getMember();
+		cloned.scores[1]=95;
+		cloned.car.model="그랜저";
+		System.out.println("원본객체 필드값 출력");
+		System.out.println(original.name);
+		System.out.println(original.age);
+		for(int i=0; i<original.scores.length; i++) {
+			System.out.println((i+1) + "번째 점수: " + original.scores[i]);
+		}
+		System.out.println(original.car.model);
+		System.out.println("-------------------------------------");
+		System.out.println("복제객체 필드값 출력");
+		System.out.println(cloned.name);
+		System.out.println(cloned.age);
+		for(int i=0; i<cloned.scores.length; i++) {
+			System.out.println((i+1) + "번째 점수: " + cloned.scores[i]);
+		}
+		System.out.println(cloned.car.model);
+		System.out.println("-------------------------------------");
+	}
+
+}
+
+
+원본객체 필드값 출력
+홍길동
+50
+1번째 점수: 80
+2번째 점수: 95
+3번째 점수: 70
+그랜저
+-------------------------------------
+복제객체 필드값 출력
+홍길동
+50
+1번째 점수: 80
+2번째 점수: 95
+3번째 점수: 70
+그랜저
+-------------------------------------
+
+위는 얕은 복제
+참조타입 필드는 주소값 복제됨
+참조타입 필드는 같은 객체를 참조하므로 필드가 참조하는 객체의 값을 변경하면 원본 객체와 복제 객체의 참조 타입 필드 둘 다 바뀐 객체를 참조함
+
+
+package javaAPI;
+
+import java.util.Arrays;
+
+public class Member2 implements Cloneable {
+	//필드
+	public String name;
+	public int age;
+	public int[] scores;
+	public Car car;
+	//생성자
+	public Member2(String name, int age, int[] scores, Car car) {
+		this.name=name;
+		this.age=age;
+		this.scores=scores;
+		this.car=car;
+	}
+	//메소드
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		Member2 cloned = (Member2) super.clone(); //name, age 얕은 복제
+		cloned.scores = Arrays.copyOf(this.scores, this.scores.length);  //배열 깊은 복제; Arrays.copyof: 깊은 복제를 해주는 메소드
+		cloned.car = new Car(this.car.model);
+		return cloned;
+	}
+	//메소드
+	public Member2 getMember() {
+		Member2 cloned=null;
+		try {
+			cloned=(Member2) clone();
+		}catch(CloneNotSupportedException e) {
+			
+		}
+		return cloned;
+	}
+}
