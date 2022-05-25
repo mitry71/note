@@ -1,0 +1,73 @@
+open in browser 확장 프로그램
+live server 리액트 시 사용
+일반문서 / 웹문서
+웹문서는 편집프로그램과 보는 프로그램이 다르다
+편집툴: so many..
+보는 프로그램이 웹브라우저
+
+손모양 마크업
+<h1></h1> 헤더.제목
+<P></p> 단락(내용)
+
+탐색기-파일-새 파일-제목.html
+탐색기-새 폴더-images
+
+HTML5 웹표준
+<태그> 여는 태그
+~~
+~
+</태그>
+
+
+<!DOCTYPE html>  <!--문서의 형식 선언:웹표준 HTML5-->
+<html lang="ko">  <!--웹문서 시작 / 웹 접근성-->
+<head>  <!--설정-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>  <!--실제 페이지가 보이는 곳-->
+    <h1>SB 홈페이지</h1>
+    <p>제가 처음으로 만든 홈페이지입니다.</p>
+</body>
+</html>
+
+
+<html lang="ko"> lang이 속성이름, ko 속성값
+<img 이미지 보여주는 태그 src 속성값
+
+메타태그 영문은 메타태그 없이 보여줌
+한글, 다른 문자 들은 지정해서 보여줌
+head css java스크립트 들어감
+
+
+파비콘 
+<link rel="" href=""> 
+
+
+<!DOCTYPE html>  <!--문서의 형식 선언:웹표준 HTML5-->
+<html lang="ko">  <!--웹문서 시작 / 웹 접근성-->
+<head>  <!--설정-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/girl.ico">  <!--파비콘-->
+    <title>SB</title>
+</head>
+<body>  <!--실제 페이지가 보이는 곳-->
+    <h1>오늘의 명언</h1>  <!--홈페이지 제목-->
+    <h2>시간이란...</h2>
+    <img src="images/watch.jpg" />
+    <p>내일 죽을 것처럼 오늘을 살고 영원히 살 것처럼 내일을 꿈꾸어라</p>
+</body>
+</html>
+
+
+웹표준검사
+에러
+<img alt속성 필수적>
+alt 대체텍스트 이미지 경로나 이름이 바뀌는 경우
+웹접근성과도 관련
+
+마크업기본규칙
+여는 태그 있으면 닫는 태그 있다
